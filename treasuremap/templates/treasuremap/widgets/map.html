@@ -1,0 +1,8 @@
+{% load static %}{% load i18n %}
+<span class="treasure-map">
+    {{ latitude }} {{ longitude }}
+    <script type="application/json">
+        {{ map_options|safe }}
+    </script>
+    <span class="map" style="width: {{ width }}px; height: {{ height }}px; display: block; margin-top: 10px"></span>
+</span>

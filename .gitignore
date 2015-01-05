@@ -1,0 +1,8 @@
+build
+dist
+.idea
+*.pyc
+*.egg-info
+*.egg
+*.sqlite3
+docs/_build/
