@@ -66,7 +66,7 @@ In models
 
     class ShopModel(models.Model):
         name = models.CharField(max_length=100)
-        map = LatLongField(blank=True)
+        point = LatLongField(blank=True)
 
 
 In forms
@@ -78,7 +78,7 @@ In forms
     from treasuremap.forms import LatLongField
 
     class ShopForm(models.Model):
-        map = LatLongField()
+        point = LatLongField()
 
 
 .. code:: html
