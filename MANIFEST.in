@@ -1,2 +1,2 @@
 include LICENSE CHANGES README.rst
-recursive-include treasuremap *.py
+recursive-include treasuremap *.py *.html *.js
