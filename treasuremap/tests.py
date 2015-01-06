@@ -5,7 +5,8 @@ from __future__ import absolute_import
 from decimal import Decimal, InvalidOperation
 
 from django.core.exceptions import ValidationError, ImproperlyConfigured
-from django.test import TestCase, override_settings
+from django.test.utils import override_settings
+from django.test import TestCase
 from django.db import models
 from django.utils.encoding import force_text, python_2_unicode_compatible
 
