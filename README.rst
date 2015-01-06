@@ -96,7 +96,7 @@ In forms
 Depending on what backend you are using, the correct widget will be displayed
 with a marker at the currently position (jQuery is required).
 
-.. image:: https://github.com/silentsokolov/django-treasuremap/blob/master/docs/images/screenshot.png
+.. image:: https://raw.githubusercontent.com/silentsokolov/django-treasuremap/master/docs/images/screenshot.png
 
 
 Settings
