@@ -1,8 +1,9 @@
 # -*- coding: utf-8 -*-
 
-from __future__ import unicode_literals
+from __future__ import unicode_literals, absolute_import
 
 from decimal import Decimal, InvalidOperation
+
 from django.core.exceptions import ValidationError
 from django.db import models
 from django.utils.encoding import smart_text
@@ -17,11 +18,27 @@ class LatLong(object):
         self.latitude = Decimal(latitude)
         self.longitude = Decimal(longitude)
 
+    @staticmethod
+    def _equals_to_the_cent(a, b):
+        return round(a, 6) == round(b, 6)
+
+    @staticmethod
+    def _no_equals_to_the_cent(a, b):
+        return round(a, 6) != round(b, 6)
+
     def __repr__(self):
         return '<{}: {:.6f};{:.6f}>'.format(self.__class__.__name__, self.latitude, self.longitude)
 
     def __str__(self):
         return '{:.6f};{:.6f}'.format(self.latitude, self.longitude)
+
+    def __eq__(self, other):
+        return isinstance(other, LatLong) and (self._equals_to_the_cent(self.latitude, other.latitude) and
+                                               self._equals_to_the_cent(self.longitude, other.longitude))
+
+    def __ne__(self, other):
+        return isinstance(other, LatLong) and (self._no_equals_to_the_cent(self.latitude, other.latitude) or
+                                               self._no_equals_to_the_cent(self.longitude, other.longitude))
 
 
 class LatLongField(with_metaclass(models.SubfieldBase, models.Field)):
@@ -39,8 +56,10 @@ class LatLongField(with_metaclass(models.SubfieldBase, models.Field)):
         return 'CharField'
 
     def to_python(self, value):
-        if not value:
+        if value is None:
             return None
+        elif not value:
+            return LatLong()
         elif isinstance(value, LatLong):
             return value
         elif isinstance(value, (list, tuple)):
@@ -61,6 +80,7 @@ class LatLongField(with_metaclass(models.SubfieldBase, models.Field)):
                 )
 
     def get_prep_value(self, value):
+        value = super(LatLongField, self).get_prep_value(value)
         if value:
             return str(value)
         elif value is None:
@@ -77,3 +97,11 @@ class LatLongField(with_metaclass(models.SubfieldBase, models.Field)):
         }
         defaults.update(kwargs)
         return super(LatLongField, self).formfield(**defaults)
+
+
+try:
+    from south.modelsinspector import add_introspection_rules
+
+    add_introspection_rules([], ["^treasuremap\.fields\.LatLongField"])
+except ImportError:
+    pass

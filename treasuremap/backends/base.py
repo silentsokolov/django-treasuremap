@@ -18,21 +18,23 @@ class BaseMapBackend(object):
         self.API_KEY = self.options.get('API_KEY', None)
 
         try:
-            self.width = self.options.get('SIZE', (400, 400))[0]
-            self.height = self.options.get('SIZE', (400, 400))[1]
-        except IndexError:
+            self.width = int(self.options.get('SIZE', (400, 400))[0])
+            self.height = int(self.options.get('SIZE', (400, 400))[1])
+        except (IndexError, ValueError):
             raise ImproperlyConfigured('Invalid SIZE parameter, use: (width, height).')
 
         try:
-            self.admin_width = self.options.get('ADMIN_SIZE', (400, 400))[0]
-            self.admin_height = self.options.get('ADMIN_SIZE', (400, 400))[1]
-        except IndexError:
+            self.admin_width = int(self.options.get('ADMIN_SIZE', (400, 400))[0])
+            self.admin_height = int(self.options.get('ADMIN_SIZE', (400, 400))[1])
+        except (IndexError, ValueError):
             raise ImproperlyConfigured('Invalid ADMIN SIZE parameter, use: (width, height).')
 
     def get_js(self):
         """
         Get jQuery plugin
         """
+        if self.NAME is None:
+            raise ImproperlyConfigured('Your use abstract class.')
         return 'treasuremap/default/js/jquery.treasuremap-{}.js'.format(self.NAME)
 
     def get_api_js(self):
@@ -46,7 +48,7 @@ class BaseMapBackend(object):
 
     @property
     def only_map(self):
-        return self.options.get('ONLY_MAP', False)
+        return self.options.get('ONLY_MAP', True)
 
     def get_map_options(self):
         map_options = self.options.get('MAP_OPTIONS', {})

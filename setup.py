@@ -2,7 +2,7 @@ from distutils.core import setup
 
 setup(
     name='django-treasuremap',
-    version='0.1',
+    version='0.2',
     url='https://github.com/silentsokolov/django-treasuremap',
     license='MIT',
     author='Dmitriy Sokolov',
@@ -13,7 +13,7 @@ setup(
     include_package_data=True,
     platforms='any',
     install_requires=[
-        'django>=1.7',
+        'django>=1.6',
     ],
     tests_require=['Django'],
     classifiers=[

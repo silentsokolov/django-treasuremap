@@ -1,3 +1,7 @@
+.. image:: https://travis-ci.org/silentsokolov/django-treasuremap.png?branch=master
+   :target: https://travis-ci.org/silentsokolov/django-treasuremap
+
+
 django-treasuremap
 ==================
 
@@ -8,7 +12,7 @@ Requirements
 ------------
 
 * Python 2.7+ or Python 3.3+
-* Django 1.7+
+* Django 1.6+
 
 
 Installation
@@ -92,7 +96,7 @@ In forms
 Depending on what backend you are using, the correct widget will be displayed
 with a marker at the currently position (jQuery is required).
 
-.. image:: docs/screenshot.png
+.. image:: https://github.com/silentsokolov/django-treasuremap/blob/master/docs/images/screenshot.png
 
 
 Settings
@@ -110,4 +114,5 @@ Other settings:
 
 - ``API_KEY`` - if need, default ``None``
 - ``SIZE`` - tuple with the size of the map, default ``(400, 400)``
+- ``ONLY_MAP`` - hide field lat/long, default ``True``
 - ``MAP_OPTIONS`` - dict, used to initialize the map, default ``{'latitude': 51.562519, 'longitude': -1.603156, 'zoom': 5}``. ``latitude`` and ``longitude`` is required, do not use other "LatLong Object".

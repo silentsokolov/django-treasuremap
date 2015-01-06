@@ -1,2 +1,6 @@
+0.2 (2015-01-06)
+    - Add test for model field, base backend, LatLong object
+    - Change default setting `ONLY_MAP`, now True
+
 0.1 (2015-01-05)
-    Initial release
+    - Initial release

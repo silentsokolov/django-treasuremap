@@ -1,0 +1,21 @@
+language: python
+
+python:
+  - "2.7"
+  - "3.2"
+  - "3.3"
+  - "3.4"
+
+env:
+  - DJANGO="django==1.7"
+  - DJANGO="django==1.6"
+
+install:
+  - pip install $DJANGO
+
+branches:
+  only:
+    - master
+
+script:
+  - python runtests.py
