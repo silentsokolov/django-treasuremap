@@ -4,6 +4,8 @@ from __future__ import absolute_import
 
 from decimal import Decimal, InvalidOperation
 
+from django import VERSION as DJANGO_VERSION
+
 from django.core.exceptions import ValidationError, ImproperlyConfigured
 from django.test.utils import override_settings
 from django.test import TestCase
@@ -90,10 +92,11 @@ class LatLongFieldTestCase(TestCase):
         self.assertRaises(ValidationError, MyModel.objects.create, empty_point='22.12345633.654321')
 
     def test_deconstruct(self):
-        field = LatLongField()
-        name, path, args, kwargs = field.deconstruct()
-        new_instance = LatLongField(*args, **kwargs)
-        self.assertEqual(field.max_length, new_instance.max_length)
+        if DJANGO_VERSION >= (1, 7):
+            field = LatLongField()
+            name, path, args, kwargs = field.deconstruct()
+            new_instance = LatLongField(*args, **kwargs)
+            self.assertEqual(field.max_length, new_instance.max_length)
 
 
 class LoadBackendTestCase(TestCase):
