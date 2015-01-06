@@ -5,7 +5,7 @@
 django-treasuremap
 ==================
 
-django-treasuremap app, makes it easy to store and display the location on the map using different providers (Google, Yandex).
+django-treasuremap app, makes it easy to store and display the location on the map using different providers (Google, Yandex, etc).
 
 
 Requirements
