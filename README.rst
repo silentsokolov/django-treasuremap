@@ -11,7 +11,7 @@ django-treasuremap app, makes it easy to store and display the location on the m
 Requirements
 ------------
 
-* Python 2.7+ or Python 3.3+
+* Python 2.7+ or Python 3.2+
 * Django 1.6+
 
 
@@ -40,7 +40,7 @@ Example:
 Configuration
 -------------
 
-Within your settings.py, you’ll need to add a setting (which backend to use, etc).
+Within your ``settings.py``, you’ll need to add a setting (which backend to use, etc).
 
 Example:
 
@@ -85,6 +85,13 @@ In forms
 
 
 .. code:: html
+
+    <head>
+        ...
+        <!-- jQuery is required; include if need -->
+        <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+        ...
+    </head>
 
     <form method="POST" action=".">
         {{ form.media }}
