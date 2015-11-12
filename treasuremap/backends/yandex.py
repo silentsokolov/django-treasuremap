@@ -2,7 +2,10 @@
 
 from __future__ import unicode_literals
 
-import urllib
+try:
+    from urllib import urlencode
+except ImportError:
+    from urllib.parse import urlencode
 
 from django.conf import settings
 
@@ -19,4 +22,4 @@ class YandexMapBackend(BaseMapBackend):
         if self.API_KEY:
             params['pikey'] = self.API_KEY
 
-        return '{js_lib}?{params}'.format(js_lib=self.API_URL, params=urllib.urlencode(params))
+        return '{js_lib}?{params}'.format(js_lib=self.API_URL, params=urlencode(params))

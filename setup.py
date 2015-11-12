@@ -24,12 +24,13 @@ def get_package_data(package):
 
 setup(
     name='django-treasuremap',
-    version='0.2.1',
+    version='0.2.2',
     url='https://github.com/silentsokolov/django-treasuremap',
     license='MIT',
     author='Dmitriy Sokolov',
     author_email='silentsokolov@gmail.com',
-    description='django-treasuremap app, makes it easy to store and display the location on the map using different providers (Google, Yandex).',
+    description='django-treasuremap app, makes it easy to store and display '
+                'the location on the map using different providers (Google, Yandex).',
     zip_safe=False,
     include_package_data=True,
     platforms='any',

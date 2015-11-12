@@ -135,7 +135,7 @@ class BaseMapBackendTestCase(TestCase):
         self.assertEqual(backend.get_widget_template(), 'treasuremap/widgets/map.html')
 
     @override_settings(TREASURE_MAP={'WIDGET_TEMPLATE': 'template/custom.html'})
-    def test_base_widget_template_default(self):
+    def test_base_widget_template_custom(self):
         backend = BaseMapBackend()
 
         self.assertEqual(backend.get_widget_template(), 'template/custom.html')

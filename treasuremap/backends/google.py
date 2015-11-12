@@ -2,7 +2,10 @@
 
 from __future__ import unicode_literals
 
-import urllib
+try:
+    from urllib import urlencode
+except ImportError:
+    from urllib.parse import urlencode
 
 from .base import BaseMapBackend
 
@@ -17,4 +20,4 @@ class GoogleMapBackend(BaseMapBackend):
         if self.API_KEY:
             params['key'] = self.API_KEY
 
-        return '{js_lib}?{params}'.format(js_lib=self.API_URL, params=urllib.urlencode(params))
+        return '{js_lib}?{params}'.format(js_lib=self.API_URL, params=urlencode(params))

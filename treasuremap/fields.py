@@ -102,6 +102,6 @@ class LatLongField(with_metaclass(models.SubfieldBase, models.Field)):
 try:
     from south.modelsinspector import add_introspection_rules
 
-    add_introspection_rules([], ["^treasuremap\.fields\.LatLongField"])
+    add_introspection_rules([], ['^treasuremap\.fields\.LatLongField'])
 except ImportError:
     pass
