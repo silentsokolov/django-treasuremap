@@ -2,6 +2,8 @@
 
 from __future__ import unicode_literals
 
+from collections import OrderedDict
+
 try:
     from urllib import urlencode
 except ImportError:
@@ -15,7 +17,8 @@ class GoogleMapBackend(BaseMapBackend):
     API_URL = '//maps.googleapis.com/maps/api/js'
 
     def get_api_js(self):
-        params = {'v': '3.exp'}
+        params = OrderedDict()
+        params['v'] = '3.exp'
 
         if self.API_KEY:
             params['key'] = self.API_KEY

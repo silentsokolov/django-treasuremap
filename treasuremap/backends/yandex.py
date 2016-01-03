@@ -2,6 +2,8 @@
 
 from __future__ import unicode_literals
 
+from collections import OrderedDict
+
 try:
     from urllib import urlencode
 except ImportError:
@@ -17,7 +19,8 @@ class YandexMapBackend(BaseMapBackend):
     API_URL = '//api-maps.yandex.ru/2.1/'
 
     def get_api_js(self):
-        params = {'lang': settings.LANGUAGE_CODE}
+        params = OrderedDict()
+        params['lang'] = settings.LANGUAGE_CODE
 
         if self.API_KEY:
             params['pikey'] = self.API_KEY

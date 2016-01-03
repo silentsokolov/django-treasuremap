@@ -255,7 +255,7 @@ class GoogleMapBackendTestCase(TestCase):
 
         self.assertEqual(
             backend.get_api_js(),
-            '//maps.googleapis.com/maps/api/js?key=random_string&v=3.exp'
+            '//maps.googleapis.com/maps/api/js?v=3.exp&key=random_string'
         )
 
 
