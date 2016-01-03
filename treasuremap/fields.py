@@ -2,15 +2,20 @@
 
 from __future__ import unicode_literals
 
-from decimal import Decimal, InvalidOperation
+from decimal import Decimal
 
+from django import VERSION as DJANGO_VERSION
 from django.core.exceptions import ValidationError
 from django.db import models
-from django.utils.encoding import smart_text
 from django.utils.six import with_metaclass
 from django.utils.translation import ugettext_lazy as _
 
 from .forms import LatLongField as FormLatLongField
+
+if DJANGO_VERSION < (1, 8):
+    DjangoModelFieldBase = with_metaclass(models.SubfieldBase, models.Field)
+else:
+    DjangoModelFieldBase = models.Field
 
 
 class LatLong(object):
@@ -25,6 +30,14 @@ class LatLong(object):
     @staticmethod
     def _no_equals_to_the_cent(a, b):
         return round(a, 6) != round(b, 6)
+
+    @property
+    def format_latitude(self):
+        return '{:.6f}'.format(self.latitude)
+
+    @property
+    def format_longitude(self):
+        return '{:.6f}'.format(self.longitude)
 
     def __repr__(self):
         return '<{}: {:.6f};{:.6f}>'.format(self.__class__.__name__, self.latitude, self.longitude)
@@ -41,7 +54,7 @@ class LatLong(object):
                                                self._no_equals_to_the_cent(self.longitude, other.longitude))
 
 
-class LatLongField(with_metaclass(models.SubfieldBase, models.Field)):
+class LatLongField(DjangoModelFieldBase):
     description = _('Geographic coordinate system fields')
     default_error_messages = {
         'invalid': _("'%(value)s' both values must be a decimal number or integer."),
@@ -62,8 +75,6 @@ class LatLongField(with_metaclass(models.SubfieldBase, models.Field)):
             return LatLong()
         elif isinstance(value, LatLong):
             return value
-        elif isinstance(value, (list, tuple)):
-            return LatLong(latitude=value[0], longitude=value[1])
         else:
             args = value.split(';')
 
@@ -72,24 +83,19 @@ class LatLongField(with_metaclass(models.SubfieldBase, models.Field)):
                     self.error_messages['invalid_separator'], code='invalid', params={'value': value},
                 )
 
-            try:
-                return LatLong(*args)
-            except InvalidOperation:
-                raise ValidationError(
-                    self.error_messages['invalid'], code='invalid', params={'value': value},
-                )
+            return LatLong(*args)
 
-    def get_prep_value(self, value):
+    def get_db_prep_value(self, value, connection, prepared=False):
         value = super(LatLongField, self).get_prep_value(value)
-        if value:
-            return str(value)
-        elif value is None:
+        if value is None:
             return None
-        return str(LatLong())
 
-    def value_to_string(self, obj):
-        value = self._get_val_from_obj(obj)
-        return smart_text(value)
+        value = self.to_python(value)
+
+        return str(value)
+
+    def from_db_value(self, value, expression, connection, context):
+        return self.to_python(value)
 
     def formfield(self, **kwargs):
         defaults = {

@@ -10,21 +10,20 @@ from django.core.exceptions import ValidationError, ImproperlyConfigured
 from django.test.utils import override_settings
 from django.test import TestCase
 from django.db import models
-from django.utils.encoding import force_text, python_2_unicode_compatible
 
 from .backends.base import BaseMapBackend
+from .backends.yandex import YandexMapBackend
+from .backends.google import GoogleMapBackend
 from .fields import LatLongField, LatLong
-from .utils import get_backend
+from .forms import LatLongField as FormLatLongField
+from .utils import get_backend, import_class
+from .widgets import MapWidget, AdminMapWidget
 
 
-@python_2_unicode_compatible
 class MyModel(models.Model):
     empty_point = LatLongField()
     null_point = LatLongField(blank=True, null=True)
     default_point = LatLongField(default=LatLong(33, 44))
-
-    def __str__(self):
-        return force_text(self.name)
 
 
 class LatLongObjectTestCase(TestCase):
@@ -82,14 +81,21 @@ class LatLongFieldTestCase(TestCase):
 
         self.assertEqual(new_m.empty_point, LatLong(22.123456, 33.654321))
 
-    def test_latlog_field_change_with_list(self):
-        m = MyModel.objects.create(empty_point=[22.123456, 33.654321])
-        new_m = MyModel.objects.get(pk=m.pk)
-
-        self.assertEqual(new_m.empty_point, LatLong(22.123456, 33.654321))
-
     def test_latlog_field_change_invalid_value(self):
         self.assertRaises(ValidationError, MyModel.objects.create, empty_point='22.12345633.654321')
+
+    def test_get_prep_value_convert(self):
+        field = LatLongField()
+
+        self.assertEqual(field.get_prep_value(''), '')
+        self.assertEqual(field.get_prep_value(LatLong(22.123456, 33.654321)), LatLong(22.123456, 33.654321))
+        self.assertIsNone(field.get_prep_value(None))
+
+    def test_get_formfield(self):
+        field = LatLongField()
+        form_field = field.formfield()
+
+        self.assertIsInstance(form_field, FormLatLongField)
 
     def test_deconstruct(self):
         if DJANGO_VERSION >= (1, 7):
@@ -111,6 +117,23 @@ class LoadBackendTestCase(TestCase):
     def test_load_failed(self):
         self.assertRaises(ImportError, get_backend, {'BACKEND': 'treasuremap.backends.unknown.UnknownMapBackend'})
 
+    def test_load_without_backend(self):
+        backend = get_backend({})
+        self.assertEqual(backend.__class__.__name__, 'GoogleMapBackend')
+
+    def test_load_not_subclass_mapbackend(self):
+        self.assertRaises(ImproperlyConfigured, get_backend, {'BACKEND': 'django.test.TestCase'})
+
+
+class ImportClassTestCase(TestCase):
+    def test_import_from_string(self):
+        c = import_class('django.test.TestCase')
+        self.assertEqual(c, TestCase)
+
+    def test_import_from_string_none(self):
+        with self.assertRaises(ImportError):
+            import_class('django.test.NonModel')
+
 
 class BaseMapBackendTestCase(TestCase):
     def test_base_init(self):
@@ -123,6 +146,15 @@ class BaseMapBackendTestCase(TestCase):
         backend = BaseMapBackend()
 
         self.assertRaises(ImproperlyConfigured, backend.get_js)
+
+    def test_base_get_js_with_name(self):
+        backend = BaseMapBackend()
+        backend.NAME = 'test'
+
+        self.assertEqual(
+            backend.get_js(),
+            'treasuremap/default/js/jquery.treasuremap-test.js'
+        )
 
     def test_base_get_api_js(self):
         backend = BaseMapBackend()
@@ -179,6 +211,17 @@ class BaseMapBackendTestCase(TestCase):
     def test_base_size_invalid_settings(self):
         self.assertRaises(ImproperlyConfigured, BaseMapBackend)
 
+    @override_settings(TREASURE_MAP={'ADMIN_SIZE': (500, 500)})
+    def test_base_admin_size_settings(self):
+        backend = BaseMapBackend()
+
+        self.assertEqual(backend.admin_width, 500)
+        self.assertEqual(backend.admin_height, 500)
+
+    @override_settings(TREASURE_MAP={'ADMIN_SIZE': ('Invalid',)})
+    def test_base_admin_size_invalid_settings(self):
+        self.assertRaises(ImproperlyConfigured, BaseMapBackend)
+
     def test_base_map_options_default(self):
         backend = BaseMapBackend()
 
@@ -195,3 +238,95 @@ class BaseMapBackendTestCase(TestCase):
             backend.get_map_options(),
             {'latitude': 44.1, 'longitude': -55.1, 'zoom': 1}
         )
+
+
+class GoogleMapBackendTestCase(TestCase):
+    def test_get_api_js_default(self):
+        backend = GoogleMapBackend()
+
+        self.assertEqual(
+            backend.get_api_js(),
+            '//maps.googleapis.com/maps/api/js?v=3.exp'
+        )
+
+    @override_settings(TREASURE_MAP={'API_KEY': 'random_string'})
+    def test_get_api_js_with_api_key(self):
+        backend = GoogleMapBackend()
+
+        self.assertEqual(
+            backend.get_api_js(),
+            '//maps.googleapis.com/maps/api/js?key=random_string&v=3.exp'
+        )
+
+
+class YandexMapBackendTestCase(TestCase):
+    def test_get_api_js(self):
+        backend = YandexMapBackend()
+
+        self.assertEqual(
+            backend.get_api_js(),
+            '//api-maps.yandex.ru/2.1/?lang=en-us'
+        )
+
+    @override_settings(TREASURE_MAP={'API_KEY': 'random_string'})
+    def test_get_api_js_with_api_key(self):
+        backend = YandexMapBackend()
+
+        self.assertEqual(
+            backend.get_api_js(),
+            '//api-maps.yandex.ru/2.1/?lang=en-us&pikey=random_string'
+        )
+
+
+class FormTestCase(TestCase):
+    def test_witget_render(self):
+        witget = MapWidget()
+        done_html = '''
+        <span class="treasure-map">
+            <input name="name_0" type="hidden" value="22.123456" />
+            <input name="name_1" type="hidden" value="33.654321" />
+            <script type="application/json">
+                {"latitude": 51.562519, "zoom": 5, "longitude": -1.603156}
+            </script>
+            <span class="map" style="width: 400px; height: 400px; display: block; margin-top: 10px"></span>
+        </span>
+        '''
+
+        out_html = witget.render('name', LatLong(22.123456, 33.654321))
+        self.assertHTMLEqual(out_html, done_html)
+
+    def test_witget_render_js(self):
+        witget = MapWidget()
+        done_html = '''
+        <script type="text/javascript" src="//maps.googleapis.com/maps/api/js?v=3.exp"></script>
+        <script type="text/javascript" src="treasuremap/default/js/jquery.treasuremap-google.js"></script>
+        '''
+
+        out_html = str(witget.media)
+        self.assertHTMLEqual(out_html, done_html)
+
+    def test_admin_witget_render(self):
+        witget = AdminMapWidget()
+        done_html = '''
+        <span class="treasure-map">
+            <input name="name_0" type="hidden" value="22.123456" />
+            <input name="name_1" type="hidden" value="33.654321" />
+            <script type="application/json">
+                {"latitude": 51.562519, "zoom": 5, "longitude": -1.603156}
+            </script>
+            <span class="map" style="width: 400px; height: 400px; display: block; margin-top: 10px"></span>
+        </span>
+        '''
+
+        out_html = witget.render('name', LatLong(22.123456, 33.654321))
+        self.assertHTMLEqual(out_html, done_html)
+
+    def test_admin_witget_render_js(self):
+        witget = AdminMapWidget()
+        done_html = '''
+        <script type="text/javascript" src="//maps.googleapis.com/maps/api/js?v=3.exp"></script>
+        <script type="text/javascript" src="treasuremap/default/js/jquery.treasuremap-google.js"></script>
+        '''
+
+        out_html = str(witget.media)
+        self.assertHTMLEqual(out_html, done_html)

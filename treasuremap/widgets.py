@@ -29,7 +29,7 @@ class MapWidget(MultiWidget):
 
     def decompress(self, value):
         if value:
-            return [value.latitude, value.longitude]
+            return [value.format_latitude, value.format_longitude]
         return [None, None]
 
     @property

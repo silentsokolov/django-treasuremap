@@ -23,11 +23,11 @@ def import_class(path):
 
 def get_backend(map_config):
     if not map_config.get('BACKEND'):
-        map_config['BACKEND'] = 'treasuremap.backends.google_backend.GoogleMapBackend'
+        map_config['BACKEND'] = 'treasuremap.backends.google.GoogleMapBackend'
 
-    backend = import_class(map_config['BACKEND'])()
+    backend = import_class(map_config['BACKEND'])
 
-    if not isinstance(backend, BaseMapBackend):
+    if not issubclass(backend, BaseMapBackend):
         raise ImproperlyConfigured('Is backend {} is not instance BaseMapBackend.'.format(backend))
 
-    return backend
+    return backend()

@@ -1,3 +1,8 @@
+0.2.3 (2016-01-02)
+    - More tests
+    - Remove LatLong as list
+    - Remove required settings
+
 0.2.2 (2015-11-12)
     - Fix py3 import
 

@@ -6,3 +6,4 @@ dist
 *.egg
 *.sqlite3
 docs/_build/
+.coverage

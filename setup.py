@@ -24,7 +24,7 @@ def get_package_data(package):
 
 setup(
     name='django-treasuremap',
-    version='0.2.2',
+    version='0.2.3',
     url='https://github.com/silentsokolov/django-treasuremap',
     license='MIT',
     author='Dmitriy Sokolov',

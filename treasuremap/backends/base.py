@@ -14,7 +14,7 @@ class BaseMapBackend(object):
     API_URL = None
 
     def __init__(self):
-        self.options = settings.TREASURE_MAP
+        self.options = getattr(settings, 'TREASURE_MAP', {})
         self.API_KEY = self.options.get('API_KEY', None)
 
         try:
