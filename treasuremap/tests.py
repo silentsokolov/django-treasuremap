@@ -286,7 +286,7 @@ class FormTestCase(TestCase):
             <input name="name_0" type="hidden" value="22.123456" />
             <input name="name_1" type="hidden" value="33.654321" />
             <script type="application/json">
-                {"latitude": 51.562519, "zoom": 5, "longitude": -1.603156}
+                {"latitude": 51.562519, "longitude": -1.603156, "zoom": 5}
             </script>
             <span class="map" style="width: 400px; height: 400px; display: block; margin-top: 10px"></span>
         </span>
@@ -312,7 +312,7 @@ class FormTestCase(TestCase):
             <input name="name_0" type="hidden" value="22.123456" />
             <input name="name_1" type="hidden" value="33.654321" />
             <script type="application/json">
-                {"latitude": 51.562519, "zoom": 5, "longitude": -1.603156}
+                {"latitude": 51.562519, "longitude": -1.603156, "zoom": 5}
             </script>
             <span class="map" style="width: 400px; height: 400px; display: block; margin-top: 10px"></span>
         </span>
