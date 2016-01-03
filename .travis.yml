@@ -1,11 +1,16 @@
+sudo: false
 language: python
 
 python:
-  - "2.7"
-  - "3.2"
-  - "3.3"
-  - "3.4"
-  - "3.5"
+  - 2.7
+  - 3.2
+  - 3.3
+  - 3.4
+  - 3.5
+
+
+install:
+    - pip install Django${DJANGO_VERSION}
 
 env:
   matrix:
@@ -24,9 +29,6 @@ matrix:
       env: DJANGO_VERSION=">=1.9,<1.10"
     - python: 3.2
       env: DJANGO_VERSION=">=1.9,<1.10"
-
-install:
-  - pip install Django${DJANGO_VERSION}
 
 branches:
   only:
