@@ -76,7 +76,8 @@ class LatLongField(DjangoModelFieldBase):
         elif isinstance(value, LatLong):
             return value
         else:
-            args = value.split(';')
+            if type(value) != list:
+                args = value.split(';')
 
             if len(args) != 2:
                 raise ValidationError(
