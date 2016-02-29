@@ -78,6 +78,8 @@ class LatLongField(DjangoModelFieldBase):
         else:
             if type(value) != list:
                 args = value.split(';')
+            else:
+                args = value
 
             if len(args) != 2:
                 raise ValidationError(
