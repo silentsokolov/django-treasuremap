@@ -21,6 +21,12 @@ settings.configure(
     DATABASES={
         'default': {'ENGINE': 'django.db.backends.sqlite3'}
     },
+    TEMPLATES=[
+        {
+            'BACKEND': 'django.template.backends.django.DjangoTemplates',
+            'APP_DIRS': True,
+        },
+    ],
     TREASURE_MAP={
         'BACKEND': 'treasuremap.backends.google.GoogleMapBackend'
     },

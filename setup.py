@@ -2,7 +2,13 @@
 # -*- coding: utf-8 -*-
 
 import os
+import re
 from setuptools import setup
+
+
+def get_version(package):
+    init_py = open(os.path.join(package, '__init__.py')).read()
+    return re.search("__version__ = ['\"]([^'\"]+)['\"]", init_py).group(1)
 
 
 def get_packages(package):
@@ -24,7 +30,7 @@ def get_package_data(package):
 
 setup(
     name='django-treasuremap',
-    version='0.2.3',
+    version=get_version('treasuremap'),
     url='https://github.com/silentsokolov/django-treasuremap',
     license='MIT',
     author='Dmitriy Sokolov',

@@ -69,6 +69,7 @@ class MapWidget(MultiWidget):
 class AdminMapWidget(MapWidget):
     def get_context_widgets(self):
         context = super(AdminMapWidget, self).get_context_widgets()
+
         context['width'] = self.map_backend.admin_width
         context['height'] = self.map_backend.admin_height
 
