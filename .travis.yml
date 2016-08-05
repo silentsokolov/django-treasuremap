@@ -10,6 +10,7 @@ python:
 
 install:
     - pip install Django${DJANGO_VERSION}
+    - pip install 'coverage<4' coveralls --use-mirrors
 
 env:
   matrix:
@@ -39,4 +40,6 @@ branches:
     - master
 
 script:
-  - python runtests.py
+  - coverage run --omit='setup.py' --source='.' runtests.py
+
+after_success: coveralls
