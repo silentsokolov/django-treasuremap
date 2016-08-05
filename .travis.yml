@@ -10,7 +10,7 @@ python:
 
 install:
     - pip install Django${DJANGO_VERSION}
-    - pip install 'coverage<4' coveralls --use-mirrors
+    - pip install 'coverage<4' coveralls
 
 env:
   matrix:
