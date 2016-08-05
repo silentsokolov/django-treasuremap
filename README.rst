@@ -1,8 +1,8 @@
 .. image:: https://travis-ci.org/silentsokolov/django-treasuremap.svg?branch=master
    :target: https://travis-ci.org/silentsokolov/django-treasuremap
 
-.. image:: https://coveralls.io/repos/github/silentsokolov/django-treasuremap/badge.svg
-   :target: https://coveralls.io/github/silentsokolov/django-treasuremap
+.. image:: https://coveralls.io/repos/github/silentsokolov/django-treasuremap/badge.svg?branch=master
+   :target: https://coveralls.io/github/silentsokolov/django-treasuremap?branch=master
 
 
 django-treasuremap
