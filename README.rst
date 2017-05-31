@@ -1,8 +1,8 @@
 .. image:: https://travis-ci.org/silentsokolov/django-treasuremap.svg?branch=master
    :target: https://travis-ci.org/silentsokolov/django-treasuremap
 
-.. image:: https://coveralls.io/repos/github/silentsokolov/django-treasuremap/badge.svg?branch=master
-   :target: https://coveralls.io/github/silentsokolov/django-treasuremap?branch=master
+.. image:: https://codecov.io/gh/silentsokolov/django-treasuremap/branch/master/graph/badge.svg
+   :target: https://codecov.io/gh/silentsokolov/django-treasuremap
 
 
 django-treasuremap
@@ -14,8 +14,8 @@ django-treasuremap app, makes it easy to store and display the location on the m
 Requirements
 ------------
 
-* Python 2.7+ or Python 3.2+
-* Django 1.6+
+* Python 2.7+ or Python 3.3+
+* Django 1.8+
 
 
 Installation
