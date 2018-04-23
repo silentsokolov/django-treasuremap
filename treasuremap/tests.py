@@ -5,7 +5,6 @@ from __future__ import unicode_literals
 from decimal import Decimal, InvalidOperation
 
 from django import VERSION as DJANGO_VERSION
-
 from django.core.exceptions import ValidationError, ImproperlyConfigured
 from django.test.utils import override_settings
 from django.test import TestCase
