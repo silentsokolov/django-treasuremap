@@ -94,7 +94,7 @@ class LatLongField(DjangoModelFieldBase):
 
         return str(value)
 
-    def from_db_value(self, value, expression, connection, context):
+    def from_db_value(self, value, expression, connection):
         return self.to_python(value)
 
     def formfield(self, **kwargs):
@@ -103,11 +103,3 @@ class LatLongField(DjangoModelFieldBase):
         }
         defaults.update(kwargs)
         return super(LatLongField, self).formfield(**defaults)
-
-
-try:
-    from south.modelsinspector import add_introspection_rules
-
-    add_introspection_rules([], ['^treasuremap\.fields\.LatLongField'])
-except ImportError:
-    pass
