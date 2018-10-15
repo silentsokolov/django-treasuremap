@@ -94,7 +94,7 @@ class LatLongField(DjangoModelFieldBase):
 
         return str(value)
 
-    def from_db_value(self, value, expression, connection, **kwargs):
+    def from_db_value(self, value, expression, connection, *args, **kwargs):
         return self.to_python(value)
 
     def formfield(self, **kwargs):
