@@ -94,7 +94,8 @@ class LatLongField(models.Field):
         return self.to_python(value)
 
     def formfield(self, **kwargs):
-        return super().formfield(**{
+        defaults = {
             'form_class': FormLatLongField,
-            **kwargs,
-        })
+        }
+        defaults.update(kwargs)
+        return super(LatLongField, self).formfield(**defaults)
