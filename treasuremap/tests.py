@@ -4,9 +4,9 @@ from __future__ import unicode_literals
 
 from decimal import Decimal, InvalidOperation
 
-from django import VERSION as DJANGO_VERSION
 from django.core.exceptions import ValidationError, ImproperlyConfigured
 from django.test.utils import override_settings
+from django.forms.renderers import get_default_renderer
 from django.test import TestCase
 from django.db import models
 
@@ -97,11 +97,10 @@ class LatLongFieldTestCase(TestCase):
         self.assertIsInstance(form_field, FormLatLongField)
 
     def test_deconstruct(self):
-        if DJANGO_VERSION >= (1, 7):
-            field = LatLongField()
-            name, path, args, kwargs = field.deconstruct()
-            new_instance = LatLongField(*args, **kwargs)
-            self.assertEqual(field.max_length, new_instance.max_length)
+        field = LatLongField()
+        name, path, args, kwargs = field.deconstruct()
+        new_instance = LatLongField(*args, **kwargs)
+        self.assertEqual(field.max_length, new_instance.max_length)
 
 
 class LoadBackendTestCase(TestCase):
@@ -284,14 +283,14 @@ class FormTestCase(TestCase):
         {"latitude": 51.562519, "longitude": -1.603156, "zoom": 5}
         '''
 
-        out_html = witget.render('name', LatLong(22.123456, 33.654321))
+        out_html = witget.render('name', LatLong(22.123456, 33.654321), renderer=get_default_renderer())
         self.assertTrue(out_html, done_html)
 
     def test_witget_render_js(self):
         witget = MapWidget()
         done_html = '''
         <script type="text/javascript" src="//maps.googleapis.com/maps/api/js?v=3.exp"></script>
-        <script type="text/javascript" src="treasuremap/default/js/jquery.treasuremap-google.js"></script>
+        <script type="text/javascript" src="/static/treasuremap/default/js/jquery.treasuremap-google.js"></script>
         '''
 
         out_html = str(witget.media)
@@ -303,14 +302,14 @@ class FormTestCase(TestCase):
         {"latitude": 51.562519, "longitude": -1.603156, "zoom": 5}
         '''
 
-        out_html = witget.render('name', LatLong(22.123456, 33.654321))
+        out_html = witget.render('name', LatLong(22.123456, 33.654321), renderer=get_default_renderer())
         self.assertTrue(out_html, done_html)
 
     def test_admin_witget_render_js(self):
         witget = AdminMapWidget()
         done_html = '''
         <script type="text/javascript" src="//maps.googleapis.com/maps/api/js?v=3.exp"></script>
-        <script type="text/javascript" src="treasuremap/default/js/jquery.treasuremap-google.js"></script>
+        <script type="text/javascript" src="/static/treasuremap/default/js/jquery.treasuremap-google.js"></script>
         '''
 
         out_html = str(witget.media)

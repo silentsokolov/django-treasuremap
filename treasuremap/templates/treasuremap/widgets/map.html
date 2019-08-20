@@ -1,5 +1,5 @@
-<span class="treasure-map">
-    {{ latitude }} {{ longitude }}
+<span class="treasure-map" style="display: inline-block;">
+    {% spaceless %}{% for widget in widget.subwidgets %}{% include widget.template_name %}{% endfor %}{% endspaceless %}
     <script type="application/json">
         {{ map_options|safe }}
     </script>

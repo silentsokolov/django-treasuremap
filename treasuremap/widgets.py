@@ -4,10 +4,10 @@ from __future__ import unicode_literals
 
 import json
 
-from django.conf import settings
 from django import forms
+from django.conf import settings
 from django.forms import MultiWidget
-from django.template.loader import render_to_string
+from django.utils.safestring import mark_safe
 
 from .utils import get_backend
 
@@ -18,11 +18,11 @@ class MapWidget(MultiWidget):
 
         if self.map_backend.only_map:
             widgets = (
-                forms.HiddenInput(), forms.HiddenInput(),
+                forms.HiddenInput(attrs=attrs), forms.HiddenInput(attrs=attrs),
             )
         else:
             widgets = (
-                forms.NumberInput(), forms.NumberInput(),
+                forms.NumberInput(attrs=attrs), forms.NumberInput(attrs=attrs),
             )
 
         super(MapWidget, self).__init__(widgets, attrs)
@@ -45,23 +45,17 @@ class MapWidget(MultiWidget):
         }
         return context
 
-    def format_output(self, rendered_widgets):
-        context = self.get_context_widgets()
-
-        context['latitude'] = rendered_widgets[0]
-        context['longitude'] = rendered_widgets[1]
-
-        return render_to_string(self.map_backend.get_widget_template(), context)
+    def render(self, name, value, attrs=None, renderer=None):
+        context = self.get_context(name, value, attrs)
+        context.update(self.get_context_widgets())
+        return mark_safe(renderer.render(self.map_backend.get_widget_template(), context))
 
     def _get_media(self):
         media = forms.Media()
         for w in self.widgets:
             media = media + w.media
 
-        media._js += (
-            self.map_backend.get_api_js(),
-            self.map_backend.get_js()
-        )
+        media += forms.Media(js=(self.map_backend.get_api_js(), self.map_backend.get_js()))
         return media
     media = property(_get_media)
 

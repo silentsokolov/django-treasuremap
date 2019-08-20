@@ -14,8 +14,8 @@ django-treasuremap app, makes it easy to store and display the location on the m
 Requirements
 ------------
 
-* Python 2.7+ or Python 3.3+
-* Django 1.8+
+* Python 2.7+ or Python 3.4+
+* Django 1.11+
 
 
 Installation
@@ -71,9 +71,27 @@ In models
     from django.db import models
     from treasuremap.fields import LatLongField
 
-    class ShopModel(models.Model):
+    class Post(models.Model):
         name = models.CharField(max_length=100)
         point = LatLongField(blank=True)
+
+
+In admin
+~~~~~~~~~
+
+.. code:: python
+
+    from django.contrib import admin
+    from treasuremap.widgets import AdminMapWidget
+
+    from .models import Post
+
+    @admin.register(Post)
+    class PostAdmin(admin.ModelAdmin):
+        def formfield_for_dbfield(self, db_field, **kwargs):
+            if db_field.name == 'point':
+                kwargs['widget'] = widgets.AdminMapWidget()
+            return super(PostAdmin,self).formfield_for_dbfield(db_field,**kwargs)
 
 
 In forms
@@ -84,7 +102,7 @@ In forms
     from django import forms
     from treasuremap.forms import LatLongField
 
-    class ShopForm(models.Model):
+    class PostForm(models.Model):
         point = LatLongField()
 
 

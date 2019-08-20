@@ -4,18 +4,11 @@ from __future__ import unicode_literals
 
 from decimal import Decimal
 
-from django import VERSION as DJANGO_VERSION
-from django.core.exceptions import ValidationError
 from django.db import models
-from django.utils.six import with_metaclass
+from django.core.exceptions import ValidationError
 from django.utils.translation import ugettext_lazy as _
 
 from .forms import LatLongField as FormLatLongField
-
-if DJANGO_VERSION < (1, 8):
-    DjangoModelFieldBase = with_metaclass(models.SubfieldBase, models.Field)
-else:
-    DjangoModelFieldBase = models.Field
 
 
 class LatLong(object):
@@ -54,7 +47,7 @@ class LatLong(object):
                                                self._no_equals_to_the_cent(self.longitude, other.longitude))
 
 
-class LatLongField(DjangoModelFieldBase):
+class LatLongField(models.Field):
     description = _('Geographic coordinate system fields')
     default_error_messages = {
         'invalid': _("'%(value)s' both values must be a decimal number or integer."),
@@ -76,7 +69,10 @@ class LatLongField(DjangoModelFieldBase):
         elif isinstance(value, LatLong):
             return value
         else:
-            args = value.split(';')
+            if isinstance(value, (list, tuple, set)):
+                args = value
+            else:
+                args = value.split(';')
 
             if len(args) != 2:
                 raise ValidationError(
@@ -98,8 +94,7 @@ class LatLongField(DjangoModelFieldBase):
         return self.to_python(value)
 
     def formfield(self, **kwargs):
-        defaults = {
+        return super().formfield(**{
             'form_class': FormLatLongField,
-        }
-        defaults.update(kwargs)
-        return super(LatLongField, self).formfield(**defaults)
+            **kwargs,
+        })

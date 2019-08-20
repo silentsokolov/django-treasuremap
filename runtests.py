@@ -15,33 +15,42 @@ settings.configure(
         'django.contrib.sites',
         'django.contrib.admin',
         'django.contrib.sessions',
+        'django.contrib.messages',
         'treasuremap',
     ),
     DATABASES={
         'default': {'ENGINE': 'django.db.backends.sqlite3'}
     },
+    TEST_RUNNER='django.test.runner.DiscoverRunner',
+    USE_TZ=True,
+    TIME_ZONE='UTC',
+    SITE_ID=1,
+    STATIC_URL='/static/',
     TEMPLATES=[
         {
             'BACKEND': 'django.template.backends.django.DjangoTemplates',
             'APP_DIRS': True,
             'OPTIONS': {
+                'debug': True,
                 'context_processors': [
                     'django.contrib.auth.context_processors.auth',
-                    'django.template.context_processors.request',
-                    'django.template.context_processors.debug',
-                    'django.template.context_processors.i18n',
-                    'django.template.context_processors.media',
-                    'django.template.context_processors.static',
-                    'django.template.context_processors.tz',
                     'django.contrib.messages.context_processors.messages',
                 ],
-            },
+            }
         },
     ],
+    MIDDLEWARE=(
+        'django.middleware.common.CommonMiddleware',
+        'django.contrib.sessions.middleware.SessionMiddleware',
+        'django.contrib.auth.middleware.AuthenticationMiddleware',
+        'django.contrib.messages.middleware.MessageMiddleware',
+    ),
+    PASSWORD_HASHERS=(
+        'django.contrib.auth.hashers.MD5PasswordHasher',
+    ),
     TREASURE_MAP={
         'BACKEND': 'treasuremap.backends.google.GoogleMapBackend'
     },
-    TEST_RUNNER='django.test.runner.DiscoverRunner'
 )
 
 django.setup()
