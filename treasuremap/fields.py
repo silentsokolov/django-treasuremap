@@ -5,12 +5,14 @@ from __future__ import unicode_literals
 from decimal import Decimal
 
 from django.db import models
+from django.utils.deconstruct import deconstructible
 from django.core.exceptions import ValidationError
 from django.utils.translation import gettext_lazy as _
 
 from .forms import LatLongField as FormLatLongField
 
 
+@deconstructible
 class LatLong(object):
     def __init__(self, latitude=0.0, longitude=0.0):
         self.latitude = Decimal(latitude)
@@ -33,7 +35,7 @@ class LatLong(object):
         return '{:.6f}'.format(self.longitude)
 
     def __repr__(self):
-        return '<{}: {:.6f};{:.6f}>'.format(self.__class__.__name__, self.latitude, self.longitude)
+        return '{}({:.6f}, {:.6f})'.format(self.__class__.__name__, self.latitude, self.longitude)
 
     def __str__(self):
         return '{:.6f};{:.6f}'.format(self.latitude, self.longitude)
@@ -99,3 +101,11 @@ class LatLongField(models.Field):
         }
         defaults.update(kwargs)
         return super(LatLongField, self).formfield(**defaults)
+
+
+# class LatLongSerializer(BaseSerializer):
+#     def serialize(self):
+#         return repr(self.value), {'from treasuremap.fields import LatLong'}
+
+
+# MigrationWriter.register_serializer(LatLong, LatLongSerializer)

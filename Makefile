@@ -1,7 +1,7 @@
 .PHONY: test sdist wheel release pre-release clean
 
 test:
-	python -Wall runtests.py
+	PYTHONWARNINGS=all PYTHONPATH=".:tests:$PYTHONPATH" django-admin test --settings=tests.settings
 
 sdist:
 	python setup.py sdist

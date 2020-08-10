@@ -8,21 +8,16 @@ from django.core.exceptions import ValidationError, ImproperlyConfigured
 from django.test.utils import override_settings
 from django.forms.renderers import get_default_renderer
 from django.test import TestCase
-from django.db import models
 
-from .backends.base import BaseMapBackend
-from .backends.yandex import YandexMapBackend
-from .backends.google import GoogleMapBackend
-from .fields import LatLongField, LatLong
-from .forms import LatLongField as FormLatLongField
-from .utils import get_backend, import_class
-from .widgets import MapWidget, AdminMapWidget
+from treasuremap.backends.base import BaseMapBackend
+from treasuremap.backends.yandex import YandexMapBackend
+from treasuremap.backends.google import GoogleMapBackend
+from treasuremap.fields import LatLongField, LatLong
+from treasuremap.forms import LatLongField as FormLatLongField
+from treasuremap.utils import get_backend, import_class
+from treasuremap.widgets import MapWidget, AdminMapWidget
 
-
-class MyModel(models.Model):
-    empty_point = LatLongField()
-    null_point = LatLongField(blank=True, null=True)
-    default_point = LatLongField(default=LatLong(33, 44))
+from .models import MyModel
 
 
 class LatLongObjectTestCase(TestCase):
@@ -50,7 +45,7 @@ class LatLongObjectTestCase(TestCase):
 
     def test_latlog_object_repr(self):
         latlong = LatLong(latitude=33.300, longitude=44.440)
-        self.assertEqual(repr(latlong), '<LatLong: 33.300000;44.440000>')
+        self.assertEqual(repr(latlong), 'LatLong(33.300000, 44.440000)')
 
     def test_latlog_object_eq(self):
         self.assertEqual(LatLong(latitude=33.300, longitude=44.440), LatLong(latitude=33.300, longitude=44.440))

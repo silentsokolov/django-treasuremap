@@ -1,5 +1,9 @@
 ## [Unreleased]
 
+## [0.3.3] - 2020-08-10
+### Added
+- Compatibility Django 3.1
+
 ## [0.3.2] - 2019-12-05
 ### Added
 - Compatibility Django 3.0
@@ -40,7 +44,8 @@
 - Required settings
 
 
-[Unreleased]: https://github.com/silentsokolov/django-treasuremap/compare/v0.3.2...HEAD
+[Unreleased]: https://github.com/silentsokolov/django-treasuremap/compare/v0.3.3...HEAD
+[0.3.3]: https://github.com/silentsokolov/django-treasuremap/compare/v0.3.2...v0.3.3
 [0.3.2]: https://github.com/silentsokolov/django-treasuremap/compare/v0.3.1...v0.3.2
 [0.3.1]: https://github.com/silentsokolov/django-treasuremap/compare/v0.3.0...v0.3.1
 [0.3.0]: https://github.com/silentsokolov/django-treasuremap/compare/v0.2.7...v0.3.0
