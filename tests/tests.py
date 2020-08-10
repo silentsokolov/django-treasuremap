@@ -283,13 +283,11 @@ class FormTestCase(TestCase):
 
     def test_witget_render_js(self):
         witget = MapWidget()
-        done_html = '''
-        <script type="text/javascript" src="//maps.googleapis.com/maps/api/js?v=3.exp"></script>
-        <script type="text/javascript" src="/static/treasuremap/default/js/jquery.treasuremap-google.js"></script>
-        '''
 
         out_html = str(witget.media)
-        self.assertHTMLEqual(out_html, done_html)
+
+        self.assertIn('//maps.googleapis.com/maps/api/js?v=3.exp', out_html)
+        self.assertIn('/static/treasuremap/default/js/jquery.treasuremap-google.js', out_html)
 
     def test_admin_witget_render(self):
         witget = AdminMapWidget()
@@ -302,10 +300,7 @@ class FormTestCase(TestCase):
 
     def test_admin_witget_render_js(self):
         witget = AdminMapWidget()
-        done_html = '''
-        <script type="text/javascript" src="//maps.googleapis.com/maps/api/js?v=3.exp"></script>
-        <script type="text/javascript" src="/static/treasuremap/default/js/jquery.treasuremap-google.js"></script>
-        '''
 
         out_html = str(witget.media)
-        self.assertHTMLEqual(out_html, done_html)
+        self.assertIn('//maps.googleapis.com/maps/api/js?v=3.exp', out_html)
+        self.assertIn('/static/treasuremap/default/js/jquery.treasuremap-google.js', out_html)

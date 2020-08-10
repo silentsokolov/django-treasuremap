@@ -41,12 +41,12 @@ class LatLong(object):
         return '{:.6f};{:.6f}'.format(self.latitude, self.longitude)
 
     def __eq__(self, other):
-        return isinstance(other, LatLong) and (self._equals_to_the_cent(self.latitude, other.latitude) and
-                                               self._equals_to_the_cent(self.longitude, other.longitude))
+        return isinstance(other, LatLong) and (
+            self._equals_to_the_cent(self.latitude, other.latitude) and self._equals_to_the_cent(self.longitude, other.longitude))
 
     def __ne__(self, other):
-        return isinstance(other, LatLong) and (self._no_equals_to_the_cent(self.latitude, other.latitude) or
-                                               self._no_equals_to_the_cent(self.longitude, other.longitude))
+        return isinstance(other, LatLong) and (
+            self._no_equals_to_the_cent(self.latitude, other.latitude) or self._no_equals_to_the_cent(self.longitude, other.longitude))
 
 
 class LatLongField(models.Field):
@@ -101,11 +101,3 @@ class LatLongField(models.Field):
         }
         defaults.update(kwargs)
         return super(LatLongField, self).formfield(**defaults)
-
-
-# class LatLongSerializer(BaseSerializer):
-#     def serialize(self):
-#         return repr(self.value), {'from treasuremap.fields import LatLong'}
-
-
-# MigrationWriter.register_serializer(LatLong, LatLongSerializer)
