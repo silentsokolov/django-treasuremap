@@ -1,0 +1,85 @@
+name: "build"
+
+on:
+  pull_request:
+  push:
+    branches: master
+
+jobs:
+  build:
+    name: Python ${{ matrix.python-version }} | Django ${{ matrix.django-version}} | Ubuntu
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - python-version: 2.7
+            django-version: "1.11.*"
+
+          - python-version: 3.5
+            django-version: "1.11.*"
+          - python-version: 3.5
+            django-version: "2.0.*"
+          - python-version: 3.5
+            django-version: "2.1.*"
+          - python-version: 3.5
+            django-version: "2.2.*"
+
+          - python-version: 3.6
+            django-version: "1.11.*"
+          - python-version: 3.6
+            django-version: "2.0.*"
+          - python-version: 3.6
+            django-version: "2.1.*"
+          - python-version: 3.6
+            django-version: "2.2.*"
+          - python-version: 3.6
+            django-version: "3.0.*"
+          - python-version: 3.6
+            django-version: "3.1.*"
+
+          - python-version: 3.7
+            django-version: "2.0.*"
+          - python-version: 3.7
+            django-version: "2.1.*"
+          - python-version: 3.7
+            django-version: "2.2.*"
+          - python-version: 3.7
+            django-version: "3.0.*"
+          - python-version: 3.7
+            django-version: "3.1.*"
+
+          - python-version: 3.8
+            django-version: "2.2.*"
+          - python-version: 3.8
+            django-version: "3.0.*"
+          - python-version: 3.8
+            django-version: "3.1.*"
+
+          - python-version: 3.9
+            django-version: "3.0.*"
+          - python-version: 3.9
+            django-version: "3.1.*"
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v2
+
+    - name: Setup Python ${{ matrix.python-version }}
+      uses: actions/setup-python@v1
+      with:
+        python-version: ${{ matrix.python-version }}
+
+    - name: Install Django ${{ matrix.django-version }}
+      run: |
+        pip install Django==${{ matrix.django-version }}
+        pip install coverage
+        pip install pytz
+
+    - name: Run tests
+      run: |
+        PYTHONPATH=".:tests:$PYTHONPATH" coverage run --omit='setup.py,tests/*' --source='.' `which django-admin` test --settings=tests.settings
+
+    - name: Upload coverage to Codecov
+      uses: codecov/codecov-action@v1
+
