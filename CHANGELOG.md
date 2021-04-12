@@ -1,5 +1,9 @@
 ## [Unreleased]
 
+## [0.3.4] - 2020-08-10
+### Added
+- Compatibility Django 3.2
+
 ## [0.3.3] - 2020-08-10
 ### Added
 - Compatibility Django 3.1

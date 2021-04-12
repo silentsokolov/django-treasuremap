@@ -57,3 +57,5 @@ PASSWORD_HASHERS = (
 TREASURE_MAP = {
     'BACKEND': 'treasuremap.backends.google.GoogleMapBackend',
 }
+
+DEFAULT_AUTO_FIELD = 'django.db.models.AutoField'
