@@ -4,9 +4,9 @@ from __future__ import unicode_literals
 
 from decimal import Decimal
 
+from django.core.exceptions import ValidationError
 from django.db import models
 from django.utils.deconstruct import deconstructible
-from django.core.exceptions import ValidationError
 from django.utils.translation import gettext_lazy as _
 
 from .forms import LatLongField as FormLatLongField
@@ -28,40 +28,44 @@ class LatLong(object):
 
     @property
     def format_latitude(self):
-        return '{:.6f}'.format(self.latitude)
+        return "{:.6f}".format(self.latitude)
 
     @property
     def format_longitude(self):
-        return '{:.6f}'.format(self.longitude)
+        return "{:.6f}".format(self.longitude)
 
     def __repr__(self):
-        return '{}({:.6f}, {:.6f})'.format(self.__class__.__name__, self.latitude, self.longitude)
+        return "{}({:.6f}, {:.6f})".format(self.__class__.__name__, self.latitude, self.longitude)
 
     def __str__(self):
-        return '{:.6f};{:.6f}'.format(self.latitude, self.longitude)
+        return "{:.6f};{:.6f}".format(self.latitude, self.longitude)
 
     def __eq__(self, other):
         return isinstance(other, LatLong) and (
-            self._equals_to_the_cent(self.latitude, other.latitude) and self._equals_to_the_cent(self.longitude, other.longitude))
+            self._equals_to_the_cent(self.latitude, other.latitude)
+            and self._equals_to_the_cent(self.longitude, other.longitude)
+        )
 
     def __ne__(self, other):
         return isinstance(other, LatLong) and (
-            self._no_equals_to_the_cent(self.latitude, other.latitude) or self._no_equals_to_the_cent(self.longitude, other.longitude))
+            self._no_equals_to_the_cent(self.latitude, other.latitude)
+            or self._no_equals_to_the_cent(self.longitude, other.longitude)
+        )
 
 
 class LatLongField(models.Field):
-    description = _('Geographic coordinate system fields')
+    description = _("Geographic coordinate system fields")
     default_error_messages = {
-        'invalid': _("'%(value)s' both values must be a decimal number or integer."),
-        'invalid_separator': _("As the separator value '%(value)s' must be ';'"),
+        "invalid": _("'%(value)s' both values must be a decimal number or integer."),
+        "invalid_separator": _("As the separator value '%(value)s' must be ';'"),
     }
 
     def __init__(self, *args, **kwargs):
-        kwargs['max_length'] = 24
+        kwargs["max_length"] = 24
         super(LatLongField, self).__init__(*args, **kwargs)
 
     def get_internal_type(self):
-        return 'CharField'
+        return "CharField"
 
     def to_python(self, value):
         if value is None:
@@ -74,16 +78,20 @@ class LatLongField(models.Field):
             if isinstance(value, (list, tuple, set)):
                 args = value
             else:
-                args = value.split(';')
+                args = value.split(";")
 
             if len(args) != 2:
                 raise ValidationError(
-                    self.error_messages['invalid_separator'], code='invalid', params={'value': value},
+                    self.error_messages["invalid_separator"],
+                    code="invalid",
+                    params={"value": value},
                 )
 
             return LatLong(*args)
 
-    def get_db_prep_value(self, value, connection, prepared=False):
+    def get_db_prep_value(
+        self, value, connection, prepared=False  # pylint: disable=unused-argument
+    ):
         value = super(LatLongField, self).get_prep_value(value)
         if value is None:
             return None
@@ -92,12 +100,10 @@ class LatLongField(models.Field):
 
         return str(value)
 
-    def from_db_value(self, value, expression, connection, *args, **kwargs):
+    def from_db_value(self, value, expression, connection):  # pylint: disable=unused-argument
         return self.to_python(value)
 
-    def formfield(self, **kwargs):
-        defaults = {
-            'form_class': FormLatLongField,
-        }
-        defaults.update(kwargs)
-        return super(LatLongField, self).formfield(**defaults)
+    def formfield(self, _form_class=None, choices_form_class=None, **kwargs):
+        return super(LatLongField, self).formfield(
+            form_class=FormLatLongField, choices_form_class=choices_form_class, **kwargs
+        )

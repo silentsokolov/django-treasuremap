@@ -2,8 +2,9 @@
 
 from __future__ import unicode_literals
 
-from treasuremap import fields
 from django.db import models
+
+from treasuremap import fields
 
 
 class MyModel(models.Model):

@@ -18,11 +18,13 @@ class MapWidget(MultiWidget):
 
         if self.map_backend.only_map:
             widgets = (
-                forms.HiddenInput(attrs=attrs), forms.HiddenInput(attrs=attrs),
+                forms.HiddenInput(attrs=attrs),
+                forms.HiddenInput(attrs=attrs),
             )
         else:
             widgets = (
-                forms.NumberInput(attrs=attrs), forms.NumberInput(attrs=attrs),
+                forms.NumberInput(attrs=attrs),
+                forms.NumberInput(attrs=attrs),
             )
 
         super(MapWidget, self).__init__(widgets, attrs)
@@ -38,10 +40,10 @@ class MapWidget(MultiWidget):
 
     def get_context_widgets(self):
         context = {
-            'map_options': json.dumps(self.map_backend.get_map_options()),
-            'width': self.map_backend.width,
-            'height': self.map_backend.height,
-            'only_map': self.map_backend.only_map,
+            "map_options": json.dumps(self.map_backend.get_map_options()),
+            "width": self.map_backend.width,
+            "height": self.map_backend.height,
+            "only_map": self.map_backend.only_map,
         }
         return context
 
@@ -57,6 +59,7 @@ class MapWidget(MultiWidget):
 
         media += forms.Media(js=(self.map_backend.get_api_js(), self.map_backend.get_js()))
         return media
+
     media = property(_get_media)
 
 
@@ -64,7 +67,7 @@ class AdminMapWidget(MapWidget):
     def get_context_widgets(self):
         context = super(AdminMapWidget, self).get_context_widgets()
 
-        context['width'] = self.map_backend.admin_width
-        context['height'] = self.map_backend.admin_height
+        context["width"] = self.map_backend.admin_width
+        context["height"] = self.map_backend.admin_height
 
         return context
