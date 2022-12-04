@@ -15,12 +15,6 @@ jobs:
       matrix:
         include:
           - python-version: 2.7
-            django-version: "1.8.*"
-          - python-version: 2.7
-            django-version: "1.9.*"
-          - python-version: 2.7
-            django-version: "1.10.*"
-          - python-version: 2.7
             django-version: "1.11.*"
 
           - python-version: 3.6
