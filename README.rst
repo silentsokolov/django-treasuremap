@@ -143,5 +143,6 @@ Other settings:
 
 - ``API_KEY`` - if need, default ``None``
 - ``SIZE`` - tuple with the size of the map, default ``(400, 400)``
+- ``ADMIN_SIZE`` - tuple with the size of the map on the admin panel, default ``(400, 400)``
 - ``ONLY_MAP`` - hide field lat/long, default ``True``
 - ``MAP_OPTIONS`` - dict, used to initialize the map, default ``{'latitude': 51.562519, 'longitude': -1.603156, 'zoom': 5}``. ``latitude`` and ``longitude`` is required, do not use other "LatLong Object".
