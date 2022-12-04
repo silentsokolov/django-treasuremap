@@ -101,7 +101,7 @@ class LatLongField(models.Field):
         return str(value)
 
     def from_db_value(
-        self, value, expression, connection, **kwargs
+        self, value, expression, connection, *args, **kwargs
     ):  # pylint: disable=unused-argument
         return self.to_python(value)
 
