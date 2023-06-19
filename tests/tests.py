@@ -264,7 +264,7 @@ class YandexMapBackendTestCase(TestCase):
         backend = YandexMapBackend()
 
         self.assertEqual(
-            backend.get_api_js(), "//api-maps.yandex.ru/2.1/?lang=en-us&pikey=random_string"
+            backend.get_api_js(), "//api-maps.yandex.ru/2.1/?lang=en-us&apikey=random_string"
         )
 
 
