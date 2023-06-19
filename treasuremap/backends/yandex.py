@@ -23,6 +23,6 @@ class YandexMapBackend(BaseMapBackend):
         params["lang"] = settings.LANGUAGE_CODE
 
         if self.API_KEY:
-            params["pikey"] = self.API_KEY
+            params["apikey"] = self.API_KEY
 
         return "{js_lib}?{params}".format(js_lib=self.API_URL, params=urlencode(params))

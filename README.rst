@@ -90,7 +90,7 @@ In admin
     class PostAdmin(admin.ModelAdmin):
         def formfield_for_dbfield(self, db_field, **kwargs):
             if db_field.name == 'point':
-                kwargs['widget'] = widgets.AdminMapWidget()
+                kwargs['widget'] = AdminMapWidget()
             return super(PostAdmin,self).formfield_for_dbfield(db_field,**kwargs)
 
 
